@@ -6,7 +6,7 @@ namespace _3MissionariesCannibals
 {
     class Program
     {
-        static int depth = 0;
+  
         static void Main(string[] args)
         {
             List<PossibleBoatPassengers> possibleBoats = new List<PossibleBoatPassengers>()
@@ -32,18 +32,18 @@ namespace _3MissionariesCannibals
 
             list.Add(startingPos);
 
-            int counter = 0;
+            
             while(true)
             {
-                Console.WriteLine(counter++);
+                
                 if (list.Count == 0) break;
 
-                Position currentPosition = list[0];
+                Position currentPosition = list.First();
                 list.RemoveAt(0);
 
                 foreach(var possiblePassengers in possibleBoats)
                 {
-                    Position newPos = (Position)currentPosition.Clone();
+                    Position newPos = (Position)currentPosition.DeepCopy();
                     if(currentPosition.Boat)
                     {
                         newPos.CannibalsLeft -= possiblePassengers.Cannibale;
@@ -62,31 +62,29 @@ namespace _3MissionariesCannibals
                     }
                     if(CheckRules(newPos,list))
                     {
-                        newPos.PositionBefore = currentPosition;
+                        foreach(var ps in currentPosition.Path)
+                        {
+                            newPos.Path.Add(ps);
+                        }
+                        newPos.Path?.Add(new Position()
+                        {
+                            CannibalsLeft = currentPosition.CannibalsLeft,
+                            MissionariesLeft = currentPosition.MissionariesLeft,
+                            CannibalsRight = currentPosition.CannibalsRight,
+                            MissionariesRight = currentPosition.MissionariesRight
+                        });
                         list.Add(newPos);
                     }
-                    //Console.WriteLine("First iteration ended");
-                    //Console.ReadKey();
+                   
                     if(currentPosition.CannibalsRight == 3 && currentPosition.MissionariesRight == 3)
                     {
+                        Console.WriteLine("PATH FOUND");
+                        Console.WriteLine("Press Enter to continue");
+                        PrintPath(currentPosition);
                         Console.ReadKey();
-                        Console.WriteLine("WIN");
-                        //Console.WriteLine(currentPosition.CannibalsLeft + " " + currentPosition.MissionariesLeft);
-                        //Console.WriteLine(currentPosition.CannibalsRight + " " + currentPosition.MissionariesRight);
-                        PrintPath(currentPosition); 
+ 
                     }
                 }
-                    //if (currentPosition.PositionBefore != null)
-                    //    {
-                    //        Console.WriteLine(currentPosition.PositionBefore.CannibalsLeft + " " + currentPosition.PositionBefore.MissionariesLeft);
-                    //        Console.WriteLine(currentPosition.PositionBefore.CannibalsRight + " " + currentPosition.PositionBefore.MissionariesRight);
-                    //    }
-                    //foreach(var p in list)
-                    //    {
-                    //        Console.WriteLine(p.CannibalsLeft + " " + p.MissionariesLeft);
-                    //        Console.WriteLine(p.CannibalsRight + " " + p.MissionariesRight);
-                    //    }
-                    //Console.WriteLine("END!");
             }
 
         }
@@ -109,12 +107,20 @@ namespace _3MissionariesCannibals
 
         static void PrintPath(Position p)
         {
-            Console.WriteLine(depth++);
-            if (p.PositionBefore != null) PrintPath(p);
+            
+            foreach(var par in p.Path)
+            {
+                Console.WriteLine("---------------");
+                Console.WriteLine("LEFT --- Cannibals " + par.CannibalsLeft + " Missionaries " + par.MissionariesLeft);
+                Console.WriteLine("RIGHT --- Cannibals " + par.CannibalsRight + " Cannibals " + par.MissionariesRight);
+                Console.WriteLine("---------------");
+                Console.ReadKey();
+            }
             Console.WriteLine("---------------");
             Console.WriteLine("Cannibals and Missionares on left " + p.CannibalsLeft + ' ' + p.MissionariesLeft);
             Console.WriteLine("Cannibals and Missionares on right " + p.CannibalsRight + ' ' + p.MissionariesRight);
             Console.WriteLine("---------------");
+            Console.ReadKey();
         }
     }
 }

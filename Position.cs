@@ -16,5 +16,19 @@ namespace _3MissionariesCannibals
         {
             return this.MemberwiseClone();
         }
+        public Position DeepCopy()
+        {
+            Position deepCopyPosition = new Position()
+            {
+                Boat = this.Boat,
+                MissionariesLeft = this.MissionariesLeft,
+                CannibalsLeft = this.CannibalsLeft,
+                MissionariesRight = this.MissionariesRight,
+                CannibalsRight = this.CannibalsRight
+            };
+            return deepCopyPosition;
+        }
+
+        public List<Position> Path = new List<Position>();
     }
 }
