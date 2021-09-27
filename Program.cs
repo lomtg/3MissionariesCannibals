@@ -112,7 +112,7 @@ namespace _3MissionariesCannibals
             {
                 Console.WriteLine("---------------");
                 Console.WriteLine("LEFT --- Cannibals " + par.CannibalsLeft + " Missionaries " + par.MissionariesLeft);
-                Console.WriteLine("RIGHT --- Cannibals " + par.CannibalsRight + " Cannibals " + par.MissionariesRight);
+                Console.WriteLine("RIGHT --- Cannibals " + par.CannibalsRight + " Missionaries " + par.MissionariesRight);
                 Console.WriteLine("---------------");
                 Console.ReadKey();
             }
